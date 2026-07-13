@@ -1,0 +1,17 @@
+{
+  "name": "Alfurqan Science Academy Portal",
+  "short_name": "Alfurqan Portal",
+  "description": "Secure Student Terminal Report, Score Entry, Announcement & Transcript Management Portal",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#1e3a8a",
+  "theme_color": "#1e3a8a",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
