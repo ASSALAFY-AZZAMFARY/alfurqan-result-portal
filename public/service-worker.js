@@ -1,37 +1,50 @@
-/**
- * SERVICE WORKER: PWA OFFLINE CONTROLLER
- * Caches core shell assets to enable offline booting.
- */
-
-const CACHE_NAME = 'alfurqan-cache-v1';
-const ASSETS_TO_CACHE = [
-  'index.html',
-  'manifest.json',
-  'icon.png'
+const CURRENT_CACHE_VERSION = 'pwa-runtime-v1';
+const APPLICATION_SHELL_ASSETS = [
+  './',
+  './index.html',
+  './manifest.json',
+  './icon-192.png',
+  './icon-512.png'
 ];
 
-self.addEventListener('install', (e) => {
-  e.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS_TO_CACHE);
-    })
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open(CURRENT_CACHE_VERSION).then((cache) => {
+      return cache.addAll(APPLICATION_SHELL_ASSETS);
+    }).then(() => self.skipWaiting())
   );
-  self.skipWaiting();
 });
 
-self.addEventListener('activate', (e) => {
-  e.waitUntil(
-    caches.keys().then((keys) => {
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
       return Promise.all(
-        keys.map((key) => {
-          if (key !== CACHE_NAME) {
-            return caches.delete(key);
+        cacheNames.map((cache) => {
+          if (cache !== CURRENT_CACHE_VERSION) {
+            return caches.delete(cache);
           }
         })
       );
-    })
+    }).then(() => self.clients.claim())
   );
-  self.clients.claim();
+});
+
+self.addEventListener('fetch', (event) => {
+  // Pass post data pipelines straight to network engine safely
+  if (event.request.method !== 'GET' || event.request.url.includes('script.google.com')) {
+    return;
+  }
+  event.respondWith(
+    fetch(event.request)
+      .then((networkResponse) => {
+        if (networkResponse && networkResponse.status === 200) {
+          const responseClone = networkResponse.clone();
+          caches.open(CURRENT_CACHE_VERSION).then((cache) => cache.put(event.request, responseClone));
+        }
+        return networkResponse;
+      })
+      .catch(() => caches.match(event.request).then((cachedResponse) => cachedResponse))
+  );
 });
 
 self.addEventListener('fetch', (e) => {
