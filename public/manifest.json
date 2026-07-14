@@ -1,23 +1,21 @@
 {
-  "short_name": "PortalApp",
-  "name": "Unified Administration and Portal Hub",
+  "short_name": "Alfurqan Portal",
+  "name": "Alfurqan Science Academy Terminal Report Portal",
   "icons": [
     {
-      "src": "icon-192.png",
+      "src": "icons/icon-192.png",
       "type": "image/png",
-      "sizes": "192x192",
-      "purpose": "any maskable"
+      "sizes": "192x192"
     },
     {
-      "src": "icon-512.png",
+      "src": "icons/icon-512.png",
       "type": "image/png",
-      "sizes": "512x512",
-      "purpose": "any maskable"
+      "sizes": "512x512"
     }
   ],
   "start_url": "./index.html",
-  "background_color": "#f8f9fa",
-  "theme_color": "#1a73e8",
+  "background_color": "#1e3a8a",
+  "theme_color": "#1e3a8a",
   "display": "standalone",
-  "orientation": "portrait-primary"
+  "orientation": "portrait"
 }
