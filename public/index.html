@@ -2,930 +2,955 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Alfurqan Science Academy - Portal Terminal</title>
-  
-  <!-- Manifest Configuration mapping for native Android & iOS Progressive Web App Shell compliance -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alfurqan Academy Gusau - Portal</title>
+  <!-- PWA Manifest & iOS Properties -->
+  <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#1e3a8a">
-  
-  <!-- Inter Font Family Stack & Bootstrap Core Grid Utilities Component -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-  
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: { schoolBlue: '#1e3a8a', schoolRed: '#b91c1c' }
+        }
+      }
+    }
+  </script>
   <style>
-    :root {
-      --primary-navy: #1e3a8a;
-      --accent-blue: #2563eb;
-      --slate-dark: #0f172a;
-      --slate-light: #64748b;
-      --bg-canvas: #f8fafc;
-    }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: var(--bg-canvas);
-      color: var(--slate-dark);
-      overflow-x: hidden;
-      padding-bottom: 40px;
-    }
-
-    /* Core Navigation Tab Triggers */
-    .nav-tabs {
-      border-bottom: 2px solid #e2e8f0;
-    }
-    .nav-tabs .nav-link {
-      color: var(--slate-light);
-      font-weight: 500;
-      border: none;
-      padding: 12px 20px;
-      transition: all 0.2s ease;
-    }
-    .nav-tabs .nav-link.active {
-      color: var(--primary-navy);
-      border-bottom: 3px solid var(--primary-navy);
-      background: none;
-    }
-
-    .card {
-      border: 1px solid #e2e8f0;
-      border-radius: 12px;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-    }
-
-    .btn-primary {
-      background-color: var(--primary-navy);
-      border: none;
-      padding: 10px 24px;
-      font-weight: 500;
-      border-radius: 6px;
-    }
-    .btn-primary:hover, .btn-primary:focus {
-      background-color: var(--accent-blue);
-    }
-
-    /* Dynamic Dropdown Autofill Selector Element Layout */
-    #admin-selector-wrapper {
-      position: relative;
-      width: 100%;
-    }
-    #adminAutofillDropdownContainer {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      right: 0;
-      z-index: 1060;
-      max-height: 250px;
-      overflow-y: auto;
-      background: white;
-      border: 1px solid #cbd5e1;
-      border-radius: 0 0 8px 8px;
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-      display: none;
-    }
-    .dropdown-search-item {
-      padding: 10px 15px;
-      cursor: pointer;
-      border-bottom: 1px solid #f1f5f9;
-      font-size: 14px;
-    }
-    .dropdown-search-item:hover {
-      background-color: #f1f5f9;
-      color: var(--accent-blue);
-    }
-
-    /* Narrative accent bar layout rules */
-    .remark-callout-box {
-      border-left: 4px solid var(--primary-navy);
-      background-color: #f8fafc;
-      border-top: 1px solid #e2e8f0;
-      border-right: 1px solid #e2e8f0;
-      border-bottom: 1px solid #e2e8f0;
-      border-radius: 0 8px 8px 0;
-    }
-
-    /* Responsive adjustments for mobile viewports */
-    @media (max-width: 768px) {
-      .branding-header {
-        text-align: center;
-      }
-      .branding-header img {
-        margin-bottom: 15px;
-      }
-      .profile-photo-container {
-        text-align: center !important;
-        margin-top: 15px;
-      }
-      .table-responsive {
-        font-size: 13px;
-      }
-    }
-
-    /* Spinner Animation Components */
-    .loader-ring {
-      display: inline-block;
-      width: 20px;
-      height: 20px;
-      border: 3px solid rgba(255,255,255,.3);
-      border-radius: 50%;
-      border-top-color: white;
-      animation: spinRing 1s ease-in-out infinite;
-    }
-    @keyframes spinRing { to { transform: rotate(360deg); } }
+    body { font-family: 'Inter', sans-serif; background: #f8fafc; }
+    .custom-loader { border-top-color: #1e3a8a; animation: spin 1s linear infinite; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
   </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col">
 
-  <!-- GLOBAL DYNAMIC ANNOUNCEMENT NOTICE BANNER GRID -->
-  <div id="ticker-alert-ribbon" class="bg-warning text-dark py-2 px-3 fw-medium font-size-14 text-center border-bottom d-none">
-    <span id="ticker-content-string">Loading institutional notifications loop...</span>
-  </div>
-
-  <div class="container my-4" style="max-width: 1050px;">
-    
-    <!-- BRANDING LOGO CONTAINER SCREEN TOP -->
-    <div class="row align-items-center mb-4 pb-3 border-bottom branding-header">
-      <div class="col-md-2 text-start">
-        <h3 class="fw-bold text-primary m-0">ASA</h3>
+  <!-- Header Banner -->
+  <header class="bg-schoolBlue text-white shadow-md">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="bg-white p-1 rounded-full shadow-inner">
+          <i class="fa-solid fa-graduation-cap text-3xl text-schoolBlue px-1"></i>
+        </div>
+        <div class="text-center sm:text-left">
+          <h1 class="text-lg sm:text-xl font-bold tracking-wide">ALFURQAN SCIENCE ACADEMY GUSAU</h1>
+          <p class="text-xs text-blue-100 font-medium">Secure Terminal Portal & Transcript Engine</p>
+        </div>
       </div>
-      <div class="col-md-8 text-center">
-        <h2 class="fw-bold m-0 text-uppercase" style="color: var(--primary-navy); letter-spacing: 0.5px;">Alfurqan Science Academy</h2>
-        <p class="text-muted small m-0">Secure Institutional Report Sheet & Operations Portal Engine</p>
-      </div>
-      <div class="col-md-2 text-end"></div>
-    </div>
-
-    <!-- MAIN ACCESS CARD TERMINAL WRAPPER LAYER -->
-    <div id="auth-view-viewport" class="card p-4 mx-auto" style="max-width: 550px;">
-      <ul class="nav nav-tabs justify-content-center mb-4" id="authTabs" role="tablist">
-        <li class="nav-item">
-          <button class="nav-link active" id="student-tab" data-bs-toggle="tab" data-bs-target="#student-panel" type="button">Student Portal</button>
-        </li>
-        <li class="nav-item">
-          <button class="nav-link" id="faculty-tab" data-bs-toggle="tab" data-bs-target="#faculty-panel" type="button">Faculty Node</button>
-        </li>
-        <li class="nav-item">
-          <button class="nav-link" id="admin-tab" data-bs-toggle="tab" data-bs-target="#admin-panel" type="button">Admin Terminal</button>
-        </li>
-      </ul>
-
-      <!-- SYSTEM AUTHENTICATION ERROR STATE CONTAINER BOX -->
-      <div id="error-alert-box" class="alert alert-danger d-none" role="alert"></div>
-
-      <div class="tab-content" id="authTabsContent">
-        <!-- STUDENT DASHBOARD AUTH PANEL -->
-        <div class="tab-pane fade show active" id="student-panel" role="tabpanel">
-          <form id="studentLoginForm" onsubmit="executeAuthRouting(event, 'student')">
-            <div class="mb-3">
-              <label class="form-label small fw-semibold">Student Matrix Identification ID</label>
-              <input type="text" class="form-control" id="stdId" placeholder="e.g. ASA/SS/001" required autocomplete="off">
-            </div>
-            <div class="mb-4">
-              <label class="form-label small fw-semibold">Registered Parent GSM Mobile Number</label>
-              <input type="tel" class="form-control" id="stdPhone" placeholder="e.g. 08167628817" required autocomplete="off">
-            </div>
-            <button type="submit" class="btn btn-primary w-100 py-2 d-flex justify-content-center align-items-center gap-2">
-              <span class="btn-text-lbl">Query Database Ledger</span>
-            </button>
-          </form>
-        </div>
-
-        <!-- FACULTY / TEACHER SCORE ENTRY AUTH PANEL -->
-        <div class="tab-pane fade" id="faculty-panel" role="tabpanel">
-          <form id="facultyLoginForm" onsubmit="executeAuthRouting(event, 'faculty')">
-            <div class="mb-3">
-              <label class="form-label small fw-semibold">Staff Allocation Username</label>
-              <input type="text" class="form-control" id="facUser" placeholder="Enter assigned username" required autocomplete="off">
-            </div>
-            <div class="mb-4">
-              <label class="form-label small fw-semibold">Access Verification Password Key</label>
-              <input type="password" class="form-control" id="facPass" placeholder="Enter system security key" required autocomplete="off">
-            </div>
-            <button type="submit" class="btn btn-primary w-100 py-2 d-flex justify-content-center align-items-center gap-2">
-              <span class="btn-text-lbl">Initialize Instructor Workspace</span>
-            </button>
-          </form>
-        </div>
-
-        <!-- SYSTEM CENTRAL ADMINISTRATIVE TERMINAL PANEL -->
-        <div class="tab-pane fade" id="admin-panel" role="tabpanel">
-          <form id="adminLoginForm" onsubmit="executeAuthRouting(event, 'admin')">
-            <div class="mb-3">
-              <label class="form-label small fw-semibold">Administrative Access Key Password</label>
-              <input type="password" class="form-control" id="admPass" placeholder="Enter master security key" required autocomplete="off">
-            </div>
-            <div class="mb-4">
-              <label class="form-label small fw-semibold">Registered Secondary Mobile GSM Number</label>
-              <input type="tel" class="form-control" id="admGsm" placeholder="Enter root supervisor mobile parameter" required autocomplete="off">
-            </div>
-            <button type="submit" class="btn btn-primary w-100 py-2 d-flex justify-content-center align-items-center gap-2">
-              <span class="btn-text-lbl">Unlock Administrative Console</span>
-            </button>
-          </form>
-        </div>
+      <div class="flex items-center gap-2 text-xs bg-blue-900/50 px-3 py-1.5 rounded-full border border-blue-700/50">
+        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span class="font-semibold text-blue-100">Live Server Connected</span>
       </div>
     </div>
+  </header>
 
-    <!-- STUDENT PERFORMANCE REPORT CARD MAIN DASHBOARD VIEWPORT CONTAINER -->
-    <div id="transcript-dashboard-viewport" class="d-none animate-fade-in">
-      <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
-        <button class="btn btn-outline-secondary btn-sm px-3" onclick="resetAppRoutingState()">← Return to Terminal Portal</button>
-        <div class="d-flex align-items-center gap-2">
-          <div id="pdf-loader" class="spinner-border text-primary spinner-border-sm d-none" role="status"></div>
-          <button id="download-pdf-btn" class="btn btn-dark btn-sm px-3" onclick="triggerPDFCompilationPipeline()">Download Report Sheet (PDF)</button>
+  <main class="flex-grow max-w-6xl w-full mx-auto p-4 flex flex-col gap-6">
+    <!-- Announcement Ticker Module -->
+    <section id="announcement-ticker" class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg shadow-sm hidden">
+      <div class="flex gap-3">
+        <i class="fa-solid fa-bullhorn text-amber-600 text-lg mt-0.5"></i>
+        <div>
+          <h4 class="font-bold text-amber-900 text-sm" id="ticker-title">Loading School Alerts...</h4>
+          <p class="text-xs text-amber-800 mt-1" id="ticker-msg"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- AUTHENTICATION CONTAINER -->
+    <section id="auth-section" class="max-w-md w-full mx-auto bg-white rounded-2xl shadow-xl border border-slate-100 p-6 my-auto">
+      <!-- Tabs -->
+      <div class="flex border-b border-slate-200 mb-6">
+        <button id="tab-student" onclick="switchAuthTab('student')" class="w-1/2 pb-3 text-sm font-bold border-b-2 border-schoolBlue text-schoolBlue focus:outline-none">
+          <i class="fa-solid fa-user-graduate mr-2"></i>Student Login
+        </button>
+        <button id="tab-staff" onclick="switchAuthTab('staff')" class="w-1/2 pb-3 text-sm font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-600 focus:outline-none">
+          <i class="fa-solid fa-user-tie mr-2"></i>Staff Portal
+        </button>
+      </div>
+
+      <!-- Live Error Output -->
+      <div id="error-alert-box" class="hidden bg-rose-50 text-rose-700 border border-rose-200 text-xs font-semibold rounded-lg p-3 mb-4 flex items-start gap-2">
+        <i class="fa-solid fa-circle-exclamation mt-0.5"></i>
+        <span id="error-alert-text"></span>
+      </div>
+
+      <!-- Student Login Fields -->
+      <div id="form-student" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wide">Student ID</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+              <i class="fa-solid fa-id-card text-sm"></i>
+            </span>
+            <input type="text" id="login-student-id" placeholder="e.g. ASA/SS/001" class="w-full pl-10 pr-4 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all">
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wide">Parent Registered Phone (GSM)</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+              <i class="fa-solid fa-phone text-sm"></i>
+            </span>
+            <input type="text" id="login-student-phone" placeholder="e.g. 08167628817" class="w-full pl-10 pr-4 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all">
+          </div>
+        </div>
+        <button onclick="executeStudentLogin()" class="w-full py-2.5 bg-schoolBlue hover:bg-blue-800 text-white font-semibold text-sm rounded-lg shadow-md transition-colors flex justify-center items-center gap-2">
+          <span>Verify Student Credentials</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+
+      <!-- Staff Login Fields -->
+      <div id="form-staff" class="space-y-4 hidden">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wide">Username</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+              <i class="fa-solid fa-user text-sm"></i>
+            </span>
+            <input type="text" id="login-staff-user" placeholder="Enter username" class="w-full pl-10 pr-4 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all">
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wide">Secure Access Password Key</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+              <i class="fa-solid fa-lock text-sm"></i>
+            </span>
+            <input type="password" id="login-staff-pass" placeholder="••••••••" class="w-full pl-10 pr-4 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all">
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wide">Registered System GSM Number</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+              <i class="fa-solid fa-phone text-sm"></i>
+            </span>
+            <input type="text" id="login-staff-phone" placeholder="For Admin Verification only" class="w-full pl-10 pr-4 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all">
+          </div>
+        </div>
+        <button onclick="executeStaffLogin()" class="w-full py-2.5 bg-slate-800 hover:bg-slate-900 text-white font-semibold text-sm rounded-lg shadow-md transition-colors flex justify-center items-center gap-2">
+          <span>Authorize Entry Access</span>
+          <i class="fa-solid fa-shield-halved"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- DASHBOARD WORKSPACE (STUDENT & ADMIN REPORT CARDVIEW) -->
+    <section id="dashboard-section" class="hidden space-y-6">
+      <!-- Top Action Bar -->
+      <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 bg-white p-4 rounded-xl shadow-sm border border-slate-100">
+        <button onclick="logout()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-lg flex items-center justify-center gap-2 self-start transition-colors">
+          <i class="fa-solid fa-arrow-left"></i>
+          <span>Return to Terminal Portal</span>
+        </button>
+        
+        <!-- Live Admin Quick Lookup Field -->
+        <div id="admin-selector-wrapper" class="relative hidden w-full md:max-w-md">
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+              <i class="fa-solid fa-magnifying-glass text-xs"></i>
+            </span>
+            <input type="text" id="adminSearchInput" onkeyup="filterAdminSearch()" onfocus="filterAdminSearch()" placeholder="Search Name, ID, or Class Cohort..." class="w-full pl-9 pr-4 py-2 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+          </div>
+          <!-- Predictive Autofill Panel -->
+          <div id="adminAutofillDropdownContainer" class="hidden absolute left-0 right-0 top-full mt-1.5 bg-white border border-slate-200 shadow-xl rounded-lg max-h-60 overflow-y-auto z-50"></div>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <button onclick="generatePDFDownload()" id="pdf-btn" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white font-semibold text-xs rounded-lg flex items-center justify-center gap-2 transition-colors">
+            <i class="fa-solid fa-file-pdf"></i>
+            <span>Download Report Sheet (PDF)</span>
+          </button>
+          <div id="pdf-loader" class="hidden items-center gap-1.5 text-xs text-slate-500 font-semibold">
+            <div class="w-4.5 h-4.5 border-2 border-slate-300 border-t-slate-700 rounded-full animate-spin"></div>
+            <span>Compiling PDF...</span>
+          </div>
         </div>
       </div>
 
-      <!-- ADMIN REALTIME AUTOCOMPLETE SEARCH BAR MODAL DISPLAY -->
-      <div id="admin-search-module-box" class="card p-3 mb-4 bg-light d-none">
-        <label class="form-label small fw-bold text-primary">Master Student Search Engine Autocomplete Lookup Box</label>
-        <div id="admin-selector-wrapper">
-          <input type="text" class="form-control" id="adminSearchInput" placeholder="Type Student Name, Class, or Matrix ID String here..." onkeyup="filterAdminAutofillDirectory()" onfocus="filterAdminAutofillDirectory()">
-          <div id="adminAutofillDropdownContainer"></div>
-        </div>
-      </div>
-
-      <div class="card p-4 bg-white">
-        <!-- CORPORATE BRANDING TRANSPARENT HEADER MAP BLOCK -->
-        <div class="row align-items-center pb-3 border-bottom mb-4">
-          <div class="col-md-2 text-start small-logo-box">
-            <img id="img-school-logo" src="" style="max-width: 90px; height: auto; display:none;" alt="Logo">
-          </div>
-          <div class="col-md-8 text-center">
-            <h3 id="lbl-school-name" class="fw-bold m-0 style-color-navy" style="font-size: 20px;"></h3>
-            <p id="lbl-school-address" class="text-muted small m-1"></p>
-            <p id="lbl-school-contact" class="text-secondary small m-0" style="font-size: 11px;"></p>
-          </div>
-          <div class="col-md-2 text-end profile-photo-container">
-            <img id="img-student-photo" src="" style="width: 95px; height: 110px; border: 1px solid #cbd5e1; border-radius: 4px; object-fit: cover;" alt="Student Photo">
-          </div>
-        </div>
-
-        <!-- PROFILE DATA SPECIFICATION TABLE GRID -->
-        <div class="row g-3 mb-4 font-size-14 text-dark">
-          <div class="col-md-6">
-            <div class="p-3 bg-light rounded border-start border-primary border-3">
-              <div class="my-1"><strong>Student Name:</strong> <span id="val-name" class="text-uppercase fw-semibold"></span></div>
-              <div class="my-1"><strong>Student Matrix ID:</strong> <span id="val-id"></span></div>
-              <div class="my-1"><strong>Gender Classification:</strong> <span id="val-gender"></span></div>
+      <!-- Dynamic Report Card Display Sheet -->
+      <article class="bg-white rounded-2xl shadow-xl border border-slate-100 p-6 space-y-6">
+        <!-- Corporate Branding Header block -->
+        <header class="flex flex-col sm:flex-row items-center justify-between border-b border-slate-200 pb-6 gap-6 text-center sm:text-left">
+          <div class="flex flex-col sm:flex-row items-center gap-4">
+            <img id="img-school-logo" src="" alt="School Logo" class="h-16 w-16 object-contain hidden">
+            <div>
+              <h2 id="view-school-name" class="text-xl font-bold text-schoolBlue text-center sm:text-left uppercase"></h2>
+              <p id="view-school-address" class="text-xs text-slate-500 max-w-lg mt-1"></p>
+              <p id="view-school-contact" class="text-[10px] text-slate-400 font-medium mt-0.5"></p>
             </div>
           </div>
-          <div class="col-md-6">
-            <div class="p-3 bg-light rounded border-start border-primary border-3">
-              <div class="my-1"><strong>Target Class Tier:</strong> <span id="val-class"></span></div>
-              <div class="my-1"><strong>Evaluation Term Cycle:</strong> <span id="val-term"></span></div>
-              <div class="my-1"><strong>Calculated Cohort Position Rank:</strong> <span id="val-rank" class="text-primary fw-bold"></span></div>
-            </div>
+          <div class="relative">
+            <img id="img-student-photo" src="" alt="Student" class="h-24 w-24 object-cover border-2 border-slate-200 rounded-lg shadow-sm">
           </div>
-        </div>
+        </header>
 
-        <!-- TRANSCRIPT SCORE MATRIX GRID LEDGER TABLE -->
-        <div class="table-responsive mb-4">
-          <table class="table table-bordered align-middle text-center font-size-14 table-striped">
-            <thead class="table-dark">
-              <tr>
-                <th style="text-align: left; width: 25%;">Assigned Subject Unit</th>
-                <th style="width: 9%;">C.A 1 (15)</th>
-                <th style="width: 9%;">C.A 2 (15)</th>
-                <th style="width: 9%;">Assign (5)</th>
-                <th style="width: 9%;">Note (5)</th>
-                <th style="width: 9%;">Exam (60)</th>
-                <th style="width: 10%;">Total (100)</th>
-                <th style="width: 9%;">Grade</th>
-                <th style="width: 11%;">Remark</th>
+        <!-- Student Profile Grid Table -->
+        <section class="grid grid-cols-2 sm:grid-cols-4 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-100">
+          <div>
+            <span class="block text-[10px] font-bold text-slate-500 uppercase tracking-wide">Student ID</span>
+            <span id="view-student-id" class="text-xs font-semibold text-slate-900 mt-0.5"></span>
+          </div>
+          <div>
+            <span class="block text-[10px] font-bold text-slate-500 uppercase tracking-wide">Full Name</span>
+            <span id="view-student-name" class="text-xs font-bold text-slate-900 mt-0.5"></span>
+          </div>
+          <div>
+            <span class="block text-[10px] font-bold text-slate-500 uppercase tracking-wide">Class Cohort</span>
+            <span id="view-student-cohort" class="text-xs font-semibold text-slate-900 mt-0.5"></span>
+          </div>
+          <div>
+            <span class="block text-[10px] font-bold text-slate-500 uppercase tracking-wide">Academic Year/Term</span>
+            <span id="view-academic-term" class="text-xs font-semibold text-slate-900 mt-0.5"></span>
+          </div>
+        </section>
+
+        <!-- Main Performance Transcript Table -->
+        <section class="overflow-x-auto border border-slate-200 rounded-xl">
+          <table class="w-full text-left border-collapse min-w-[600px]">
+            <thead>
+              <tr class="bg-schoolBlue text-white text-xs">
+                <th class="p-3 font-semibold">Subject Name</th>
+                <th class="p-3 text-center font-semibold w-24">C.A 1 (15)</th>
+                <th class="p-3 text-center font-semibold w-24">C.A 2 (15)</th>
+                <th class="p-3 text-center font-semibold w-24">Assign (5)</th>
+                <th class="p-3 text-center font-semibold w-24">Note (5)</th>
+                <th class="p-3 text-center font-semibold w-24">Exam (60)</th>
+                <th class="p-3 text-center font-semibold w-28">Total (100)</th>
+                <th class="p-3 text-center font-semibold w-20">Grade</th>
+                <th class="p-3 font-semibold w-36">Remarks</th>
               </tr>
             </thead>
-            <tbody id="transcript-table-body-target"></tbody>
+            <tbody id="view-results-tbody" class="divide-y divide-slate-100 text-xs text-slate-700">
+              <!-- Rendered programmatically -->
+            </tbody>
           </table>
-        </div>
+        </section>
 
-        <!-- SUMMARY METRICS METRIC CARDS ROW -->
-        <div class="row g-3 mb-4">
-          <div class="col-6 col-md-3 mx-auto">
-            <div class="card bg-light p-3 text-center border">
-              <span class="text-muted small text-uppercase display-block mb-1" style="font-size: 11px;">Cumulative Total</span>
-              <h3 id="card-total-score" class="fw-bold text-dark m-0">0</h3>
+        <!-- Summary Statistics Grid -->
+        <section class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <!-- Analytical Cards -->
+          <div class="bg-blue-50 border border-blue-100 rounded-xl p-4 flex items-center justify-between">
+            <div>
+              <span class="block text-[10px] font-bold text-blue-600 uppercase tracking-wide">Cumulative Total</span>
+              <span id="view-total-score" class="text-lg font-bold text-blue-900 mt-0.5"></span>
             </div>
+            <i class="fa-solid fa-chart-simple text-blue-300 text-xl"></i>
           </div>
-          <div class="col-6 col-md-3 mx-auto">
-            <div class="card p-3 text-center border" style="background-color: #f1f5f9;">
-              <span class="text-muted small text-uppercase display-block mb-1" style="font-size: 11px;">Percentage Mean</span>
-              <h3 id="card-average-percent" class="fw-bold text-primary m-0">0%</h3>
+          <div class="bg-emerald-50 border border-emerald-100 rounded-xl p-4 flex items-center justify-between">
+            <div>
+              <span class="block text-[10px] font-bold text-emerald-600 uppercase tracking-wide">Percentage Average</span>
+              <span id="view-average" class="text-lg font-bold text-emerald-900 mt-0.5"></span>
             </div>
+            <i class="fa-solid fa-percent text-emerald-300 text-xl"></i>
           </div>
-        </div>
+          <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-4 flex items-center justify-between">
+            <div>
+              <span class="block text-[10px] font-bold text-indigo-600 uppercase tracking-wide">Position Rank</span>
+              <span id="view-ranking" class="text-lg font-bold text-indigo-900 mt-0.5"></span>
+            </div>
+            <i class="fa-solid fa-award text-indigo-300 text-xl"></i>
+          </div>
+        </section>
 
-        <!-- FORM TEACHER ASSESSMENT NARRATIVE STATEMENT EXECUTIVE REMARK -->
-        <div class="p-3 remark-callout-box mb-2">
-          <h6 class="fw-bold text-uppercase m-0 mb-1" style="color: var(--primary-navy); font-size: 12px;" id="lbl-head-title">Principal Review Assessment Remark Summary:</h6>
-          <p id="val-narrative-remark" class="m-0 font-italic text-secondary small" style="line-height: 1.5; font-style: italic;"></p>
+        <!-- Narrative Evaluations Comments -->
+        <section class="bg-slate-50 border-l-4 border-slate-500 rounded-r-xl p-4">
+          <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Executive Administration Remarks</h4>
+          <p id="view-teacher-remark" class="text-xs text-slate-600 mt-1.5 italic font-medium leading-relaxed"></p>
+        </section>
+      </article>
+    </section>
+
+    <!-- CLASSROOM SCORE INPUT MODULE (TEACHERS & ADMINS) -->
+    <section id="grading-section" class="hidden bg-white rounded-2xl shadow-xl border border-slate-100 p-6 space-y-6">
+      <div class="flex items-center justify-between border-b border-slate-200 pb-4">
+        <div>
+          <h2 class="text-lg font-bold text-slate-800">Classroom Grading Terminal</h2>
+          <p class="text-xs text-slate-400 mt-0.5">Secure academic record logging platform</p>
         </div>
+        <button onclick="logout()" class="px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-lg transition-colors">
+          Log Out
+        </button>
       </div>
+
+      <!-- Quick Context Info -->
+      <div class="bg-blue-50 border border-blue-100 rounded-xl p-3 flex flex-wrap items-center justify-between text-xs text-blue-900 gap-2">
+        <div>
+          <span class="font-bold">Operator:</span> <span id="operator-name" class="font-medium mr-4"></span>
+          <span class="font-bold">Permission Domain:</span> <span id="operator-domain" class="font-medium"></span>
+        </div>
+        <!-- Admin Navigation Switch -->
+        <button id="admin-db-link" onclick="openAdminSystemSettings()" class="hidden px-2.5 py-1 bg-schoolBlue hover:bg-blue-900 text-white font-bold rounded shadow transition-colors">
+          Open Admin Control Panel
+        </button>
+      </div>
+
+      <!-- Single Student Quick-Grade Entry Form -->
+      <form id="score-form" onsubmit="executeScorePost(event)" class="space-y-4">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wide">Student ID</label>
+            <input type="text" id="score-student-id" required placeholder="ASA/SS/001" class="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wide">Subject Name</label>
+            <input type="text" id="score-subject" required placeholder="e.g. Mathematics" class="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wide">Class Cohort</label>
+            <input type="text" id="score-class" required placeholder="e.g. JSS 1" class="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wide">C.A 1 (Max 15)</label>
+            <input type="number" id="score-ca1" min="0" max="15" placeholder="0" class="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wide">C.A 2 (Max 15)</label>
+            <input type="number" id="score-ca2" min="0" max="15" placeholder="0" class="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wide">Assign (Max 5)</label>
+            <input type="number" id="score-ass" min="0" max="5" placeholder="0" class="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wide">Note (Max 5)</label>
+            <input type="number" id="score-note" min="0" max="5" placeholder="0" class="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+          </div>
+          <div class="col-span-2 sm:col-span-1">
+            <label class="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wide">Exam (Max 60)</label>
+            <input type="number" id="score-exam" min="0" max="60" placeholder="0" class="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <button type="submit" class="px-5 py-2.5 bg-schoolBlue hover:bg-blue-900 text-white font-semibold text-sm rounded-lg shadow-md transition-all">
+            Commit Scores to Ledger
+          </button>
+          <span id="commit-loader" class="hidden text-xs text-slate-500 items-center gap-1.5 font-medium">
+            <div class="w-4 h-4 border-2 border-slate-300 border-t-slate-700 rounded-full animate-spin"></div>
+            <span>Posting Data...</span>
+          </span>
+        </div>
+      </form>
+    </section>
+
+    <!-- ADMIN STUDENT RECORD DATABASE CONTROL MODULE -->
+    <section id="admin-db-section" class="hidden bg-white rounded-2xl shadow-xl border border-slate-100 p-6 space-y-6">
+      <div class="flex items-center justify-between border-b border-slate-200 pb-4">
+        <div>
+          <h2 class="text-lg font-bold text-slate-800">Admin Directory & Student Control Panel</h2>
+          <p class="text-xs text-slate-400 mt-0.5">Global Student database access parameters</p>
+        </div>
+        <button onclick="closeAdminSystemSettings()" class="px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-lg transition-colors">
+          Back to Grading Screen
+        </button>
+      </div>
+
+      <!-- Live Student Profile CRUD Form -->
+      <form id="student-crud-form" onsubmit="executeStudentPost(event)" class="bg-slate-50 border border-slate-100 rounded-xl p-4 space-y-4">
+        <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wide border-b border-slate-200 pb-2">Add / Update Student Profile</h3>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div>
+            <label class="block text-[10px] font-bold text-slate-600 uppercase mb-1">Student ID (Required)</label>
+            <input type="text" id="crud-id" required placeholder="ASA/SS/001" class="w-full px-2.5 py-1.5 text-xs border border-slate-200 rounded-lg bg-white">
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-slate-600 uppercase mb-1">Full Name</label>
+            <input type="text" id="crud-name" required placeholder="JOHN SMITH" class="w-full px-2.5 py-1.5 text-xs border border-slate-200 rounded-lg bg-white">
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-slate-600 uppercase mb-1">Class</label>
+            <input type="text" id="crud-class" required placeholder="JSS 1" class="w-full px-2.5 py-1.5 text-xs border border-slate-200 rounded-lg bg-white">
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-slate-600 uppercase mb-1">Arm</label>
+            <input type="text" id="crud-arm" required placeholder="A" class="w-full px-2.5 py-1.5 text-xs border border-slate-200 rounded-lg bg-white">
+          </div>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div>
+            <label class="block text-[10px] font-bold text-slate-600 uppercase mb-1">Section</label>
+            <input type="text" id="crud-section" required placeholder="Junior Secondary" class="w-full px-2.5 py-1.5 text-xs border border-slate-200 rounded-lg bg-white">
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-slate-600 uppercase mb-1">Gender</label>
+            <select id="crud-gender" class="w-full px-2.5 py-1.5 text-xs border border-slate-200 rounded-lg bg-white">
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-slate-600 uppercase mb-1">Parent Phone (GSM)</label>
+            <input type="text" id="crud-phone" required placeholder="08167628817" class="w-full px-2.5 py-1.5 text-xs border border-slate-200 rounded-lg bg-white">
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-slate-600 uppercase mb-1">PHOTO Drive File ID</label>
+            <input type="text" id="crud-photo" placeholder="Drive file ID string" class="w-full px-2.5 py-1.5 text-xs border border-slate-200 rounded-lg bg-white">
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <button type="submit" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-lg transition-colors">
+            Write to Directory
+          </button>
+          <button type="button" onclick="executeStudentDelete()" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-lg transition-colors">
+            Delete Profile & Grades
+          </button>
+          <span id="crud-loader" class="hidden text-[10px] font-medium text-slate-500 items-center gap-1.5">
+            <div class="w-3.5 h-3.5 border-2 border-slate-300 border-t-slate-600 rounded-full animate-spin"></div>
+            <span>Working...</span>
+          </span>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <!-- LOADING BACKDROP SCREEN OVERLAY -->
+  <section id="loading-overlay" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex flex-col items-center justify-center z-50 hidden">
+    <div class="bg-white p-6 rounded-2xl shadow-2xl border border-slate-100 flex flex-col items-center gap-4">
+      <div class="w-10 h-10 border-4 border-slate-200 border-t-schoolBlue rounded-full animate-spin"></div>
+      <p class="text-xs font-bold text-slate-700 uppercase tracking-wider" id="loading-overlay-text">Processing Session...</p>
     </div>
+  </section>
 
-    <!-- FACULTY INSTRUCTOR DATA ENTRY TERMINAL PANEL -->
-    <div id="faculty-workspace-viewport" class="d-none animate-fade-in">
-      <div class="d-flex justify-content-between align-items-center mb-4">
-        <button class="btn btn-outline-secondary btn-sm px-3" onclick="resetAppRoutingState()">← Exit Workspace Node</button>
-        <span class="badge bg-primary px-3 py-2 fs-7" id="faculty-node-badge-lbl">Faculty Workspace Node</span>
-      </div>
+  <!-- CORPORATE COMPLIANCE SYSTEM FOOTER -->
+  <footer style="text-align: center; font-size: 11px; color: #64748b; border-top: 1px solid #e2e8f0; margin-top: 30px; padding-top: 15px; white-space: nowrap;">
+    &copy; <span id="DynamicYearLabel"></span> ALFURQAN ACADEMY GUSAU. All Rights Reserved. | Powered by Alwafaa Business Solution & Technologies (08167628817).
+  </footer>
 
-      <div class="card p-4 bg-white mx-auto" style="max-width: 650px;">
-        <h4 class="fw-bold border-bottom pb-2 mb-3 text-dark">Continuous Assessment Score Input Terminal</h4>
-        
-        <div id="faculty-status-alert" class="alert d-none"></div>
+  <!-- CLIENT WEB ENGINE SCRIPT -->
+  <script>
+    // CORE GLOBAL RUNTIME PARAMETERS
+    const GAS_API_URL = "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE"; // <-- DEPLOYED WEB APP LINK
 
-        <!-- Student verification field group query mapping -->
-        <div class="row g-2 align-items-end mb-4 border p-3 rounded bg-light">
-          <div class="col-md-8">
-            <label class="form-label small fw-bold">Target Student ID Reference String</label>
-            <input type="text" class="form-control" id="facTargetStudentId" placeholder="Input Student ID (e.g. ASA/SS/001)">
-          </div>
-          <div class="col-md-4">
-            <button type="button" class="btn btn-dark w-100" onclick="fetchTargetStudentContextForFaculty()">Verify ID Node</button>
-          </div>
-        </div>
+    let authState = { mode: "student", staffData: null, studentData: null, adminPass: "", adminPhone: "" };
+    let adminStudentCache = [];
+    let activeResultPayload = null;
 
-        <!-- Dynamic Entry Interface Fields mapping layout -->
-        <div id="faculty-score-fields-envelope" class="d-none">
-          <div class="p-3 bg-secondary text-white rounded mb-4 font-size-14">
-            <div class="my-1"><strong>Student Reference Target:</strong> <span id="fac-lbl-student-name" class="text-uppercase fw-bold"></span></div>
-            <div class="my-1"><strong>Class Designation Level:</strong> <span id="fac-lbl-student-class"></span></div>
-            <div class="my-1"><strong>Active Data Subject Assignment Line:</strong> <span id="fac-lbl-assigned-subject" class="fw-bold text-warning"></span></div>
-          </div>
+    // Execute on first page load
+    window.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("DynamicYearLabel").textContent = new Date().getFullYear();
+      loadAnnouncements();
+    });
 
-          <form id="facultyScoreCommitForm" onsubmit="commitFacultyScoresToLedger(event)">
-            <div class="row g-3 mb-3">
-              <div class="col-6 col-md-4">
-                <label class="form-label small fw-semibold">C.A. 1 Test Mark (Max 15)</label>
-                <input type="number" class="form-control score-field-input" id="score_ca1" min="0" max="15" placeholder="0 - 15">
-              </div>
-              <div class="col-6 col-md-4">
-                <label class="form-label small fw-semibold">C.A. 2 Test Mark (Max 15)</label>
-                <input type="number" class="form-control score-field-input" id="score_ca2" min="0" max="15" placeholder="0 - 15">
-              </div>
-              <div class="col-6 col-md-4">
-                <label class="form-label small fw-semibold">Home Assignment (Max 5)</label>
-                <input type="number" class="form-control score-field-input" id="score_assign" min="0" max="5" placeholder="0 - 5">
-              </div>
-              <div class="col-6 col-md-4">
-                <label class="form-label small fw-semibold">Notebook Checks (Max 5)</label>
-                <input type="number" class="form-control score-field-input" id="score_note" min="0" max="5" placeholder="0 - 5">
-              </div>
-              <div class="col-12 col-md-8">
-                <label class="form-label small fw-semibold">Main Terminal Examination Mark (Max 60)</label>
-                <input type="number" class="form-control score-field-input" id="score_exam" min="0" max="60" placeholder="0 - 60">
-              </div>
-            </div>
+    // Clean inline alert fields
+    function alertMsg(text) {
+      const box = document.getElementById("error-alert-box");
+      const label = document.getElementById("error-alert-text");
+      if (text) {
+        label.textContent = text;
+        box.classList.remove("hidden");
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        box.classList.add("hidden");
+      }
+    }
 
-            <button type="submit" class="btn btn-primary w-100 py-2 mt-2">Commit Record Entries to Database Ledger</button>
-          </form>
-        </div>
-      </div>
-    </div>
+    // Dynamic Loading Interface Toggle
+    function toggleOverlay(show, message = "Processing Session...") {
+      const overlay = document.getElementById("loading-overlay");
+      document.getElementById("loading-overlay-text").textContent = message;
+      if (show) overlay.classList.remove("hidden");
+      else overlay.classList.add("hidden");
+    }
 
-    <!-- CORPORATE SYSTEM FOOTER STANDARDIZATION PANEL BLOCK -->
-    <footer style="text-align: center; font-size: 11px; color: #64748b; border-top: 1px solid #e2e8f0; margin-top: 30px; padding-top: 15px; white-space: nowrap;">
-      &copy; <span id="DynamicYearLabel"></span> ALFURQAN ACADEMY GUSAU. All Rights Reserved. | Powered by Alwafaa Business Solution & Technologies (08167628817).
-    </footer>
+    // Load Announcements notice board onto login interface
+    async function loadAnnouncements() {
+      try {
+        const response = await fetch(GAS_API_URL, {
+          method: "POST",
+          body: JSON.stringify({ action: "getAnnouncements", audience: "all" })
+        });
+        const result = await response.json();
+        if (result.success && result.announcements.length > 0) {
+          const recent = result.announcements[0];
+          document.getElementById("ticker-title").textContent = recent.title + " (Published: " + recent.date + ")";
+          document.getElementById("ticker-msg").textContent = recent.message;
+          document.getElementById("announcement-ticker").classList.remove("hidden");
+        }
+      } catch (e) {
+        console.error("Alert ticker offline.", e);
+      }
+    }
 
-  </div>
+    // Switch client authentication tabs
+    function switchAuthTab(mode) {
+      authState.mode = mode;
+      alertMsg(null);
+      const btnStudent = document.getElementById("tab-student");
+      const btnStaff = document.getElementById("tab-staff");
+      const formStudent = document.getElementById("form-student");
+      const formStaff = document.getElementById("form-staff");
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+      if (mode === "student") {
+        btnStudent.className = "w-1/2 pb-3 text-sm font-bold border-b-2 border-schoolBlue text-schoolBlue focus:outline-none";
+        btnStaff.className = "w-1/2 pb-3 text-sm font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-600 focus:outline-none";
+        formStudent.classList.remove("hidden");
+        formStaff.classList.add("hidden");
+      } else {
+        btnStaff.className = "w-1/2 pb-3 text-sm font-bold border-b-2 border-slate-800 text-slate-800 focus:outline-none";
+        btnStudent.className = "w-1/2 pb-3 text-sm font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-600 focus:outline-none";
+        formStaff.classList.remove("hidden");
+        formStudent.classList.add("hidden");
+      }
+    }
+
+    // Execute Student Dashboard login
+    async function executeStudentLogin() {
+      alertMsg(null);
+      const studentId = document.getElementById("login-student-id").value.trim();
+      const parentPhone = document.getElementById("login-student-phone").value.trim();
+
+      if (!studentId || !parentPhone) {
+        alertMsg("All parameters are mandatory.");
+        return;
+      }
+
+      toggleOverlay(true, "Fetching Academic Ledger...");
+      try {
+        const response = await fetch(GAS_API_URL, {
+          method: "POST",
+          body: JSON.stringify({ action: "getStudentResult", studentId, parentPhone })
+        });
+        const result = await response.json();
+        if (result.success) {
+          authState.studentData = result.student;
+          renderStudentTranscriptDashboard(result);
+        } else {
+          alertMsg(result.msg);
+        }
+      } catch (e) {
+        alertMsg("Gateway Timeout. Check internet connectivity.");
+      } finally {
+        toggleOverlay(false);
+      }
+    }
+
+    // Execute Staff login route
+    async function executeStaffLogin() {
+      alertMsg(null);
+      const username = document.getElementById("login-staff-user").value.trim();
+      const password = document.getElementById("login-staff-pass").value.trim();
+      const phone = document.getElementById("login-staff-phone").value.trim();
+
+      if (!username || !password || !phone) {
+        alertMsg("Username, Password, and GSM numbers are required.");
+        return;
+      }
+
+      toggleOverlay(true, "Authenticating Profile...");
+      try {
+        const response = await fetch(GAS_API_URL, {
+          method: "POST",
+          body: JSON.stringify({ action: "authenticateStaff", username, password })
+        });
+        const result = await response.json();
+        if (result.success) {
+          authState.staffData = result.user;
+          // Store raw credentials safely in RAM memory loop
+          authState.staffData.password = password;
+          
+          if (result.user.isAdmin || result.user.role === "Admin" || result.user.role === "Admin2") {
+            authState.adminPass = password;
+            authState.adminPhone = phone;
+            await cacheAdminMasterDirectory();
+          } else {
+            // Render basic grading UI context for teachers
+            openTeacherGradeEntry();
+          }
+        } else {
+          alertMsg(result.msg);
+        }
+      } catch (e) {
+        alertMsg("Administrative Interface authentication timeout.");
+      } finally {
+        toggleOverlay(false);
+      }
+    }
+
+    // Cache entire student list for fast predictive autocomplete (Admins only)
+    async function cacheAdminMasterDirectory() {
+      try {
+        const response = await fetch(GAS_API_URL, {
+          method: "POST",
+          body: JSON.stringify({ 
+            action: "getAdminInitialData", 
+            adminPass: authState.adminPass, 
+            adminGsm: authState.adminPhone 
+          })
+        });
+        const result = await response.json();
+        if (result.success) {
+          adminStudentCache = result.studentDirectory;
+          // Successfully loaded Admin credentials, show Dashboard with admin controls
+          document.getElementById("admin-selector-wrapper").classList.remove("hidden");
+          document.getElementById("admin-db-link").classList.remove("hidden");
+          
+          // Default load first student profile from master list
+          if (adminStudentCache.length > 0) {
+            executeAdminRecordSwitch(adminStudentCache[0].id);
+          } else {
+            // Show blank state
+            document.getElementById("auth-section").classList.add("hidden");
+            document.getElementById("dashboard-section").classList.remove("hidden");
+          }
+        } else {
+          alertMsg(result.msg);
+        }
+      } catch (e) {
+        alertMsg("Error caching administrative profiles.");
+      }
+    }
+
+    // Switch student profile display smoothly via administrative selector
+    async function executeAdminRecordSwitch(targetStudentId) {
+      document.getElementById("adminAutofillDropdownContainer").classList.add("hidden");
+      toggleOverlay(true, "Loading Profile Card...");
+      try {
+        const response = await fetch(GAS_API_URL, {
+          method: "POST",
+          body: JSON.stringify({
+            action: "getallStudentResult",
+            adminPass: authState.adminPass,
+            adminGsm: authState.adminPhone,
+            targetStudentId: targetStudentId
+          })
+        });
+        const result = await response.json();
+        if (result.success) {
+          renderStudentTranscriptDashboard(result);
+          // Populate the CRUD interface with selection
+          document.getElementById("crud-id").value = result.student.id;
+          document.getElementById("crud-name").value = result.student.name;
+          document.getElementById("crud-class").value = result.student.class;
+          document.getElementById("crud-arm").value = result.student.arm;
+          document.getElementById("crud-section").value = result.student.section;
+          document.getElementById("crud-gender").value = result.student.gender;
+          document.getElementById("crud-phone").value = result.student.phone;
+          document.getElementById("crud-photo").value = result.student.photoId || "";
+        } else {
+          alertMsg(result.msg);
+        }
+      } catch (e) {
+        alertMsg("Network timeout switching target profile.");
+      } finally {
+        toggleOverlay(false);
+      }
+    }
+
+    // Predictive live lookup selector event loop
+    function filterAdminSearch() {
+      const query = document.getElementById("adminSearchInput").value.trim().toLowerCase();
+      const container = document.getElementById("adminAutofillDropdownContainer");
+      
+      if (query === "") {
+        container.classList.add("hidden");
+        return;
+      }
+      
+      const matches = adminStudentCache.filter(item => 
+        item.name.toLowerCase().includes(query) || 
+        item.id.toLowerCase().includes(query) || 
+        item.class.toLowerCase().includes(query)
+      );
+      
+      if (matches.length === 0) {
+        container.innerHTML = `<div class="p-3 text-xs text-slate-400 italic">No matching records found</div>`;
+      } else {
+        container.innerHTML = matches.map(item => `
+          <button onclick="executeAdminRecordSwitch('${item.id}')" class="w-full text-left p-3 text-xs border-b border-slate-100 hover:bg-slate-50 transition-colors flex justify-between">
+            <span class="font-bold text-slate-800">${item.name} (${item.id})</span>
+            <span class="text-blue-600 font-semibold uppercase">${item.class}</span>
+          </button>
+        `).join('');
+      }
+      container.classList.remove("hidden");
+    }
+
+    // Hide suggestions when clicking outside
+    document.addEventListener("click", (e) => {
+      const container = document.getElementById("adminAutofillDropdownContainer");
+      const searchInput = document.getElementById("adminSearchInput");
+      if (e.target !== container && e.target !== searchInput) {
+        container.classList.add("hidden");
+      }
+    });
+
+    // Populate transcript metrics into HTML Dashboard
+    function renderStudentTranscriptDashboard(payload) {
+      activeResultPayload = payload;
+      alertMsg(null);
+      
+      document.getElementById("auth-section").classList.add("hidden");
+      document.getElementById("dashboard-section").classList.remove("hidden");
+
+      // Global parameters
+      document.getElementById("view-school-name").textContent = payload.school.name;
+      document.getElementById("view-school-address").textContent = payload.school.address;
+      document.getElementById("view-school-contact").textContent = `Web: ${payload.school.website} | Email: ${payload.school.email} | Tel: ${payload.school.phone}`;
+      
+      // Load Dynamic Logo
+      const logoImg = document.getElementById("img-school-logo");
+      if (payload.school.logoBase64) {
+        logoImg.src = payload.school.logoBase64;
+        logoImg.classList.remove("hidden");
+      }
+
+      // Student details
+      document.getElementById("view-student-id").textContent = payload.student.id;
+      document.getElementById("view-student-name").textContent = payload.student.name;
+      document.getElementById("view-student-cohort").textContent = `${payload.student.class} (${payload.student.arm}) - ${payload.student.section}`;
+      document.getElementById("view-academic-term").textContent = `${payload.school.academicYear} | ${payload.school.term}`;
+      
+      // Binary assignment to prevent caching locks and update instantly on switches
+      document.getElementById("img-student-photo").src = payload.student.photoBase64;
+
+      // Compile and render academic table
+      const tbody = document.getElementById("view-results-tbody");
+      tbody.innerHTML = "";
+      
+      if (payload.analytics.subjects.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="9" class="p-6 text-center text-slate-400 italic">No academic performance records saved for this term.</td></tr>`;
+      } else {
+        payload.analytics.subjects.forEach(sub => {
+          const tr = document.createElement("tr");
+          tr.className = "hover:bg-slate-50 transition-colors";
+          tr.innerHTML = `
+            <td class="p-3 font-semibold text-slate-800">${sub.name}</td>
+            <td class="p-3 text-center font-medium">${sub.ca1}</td>
+            <td class="p-3 text-center font-medium">${sub.ca2}</td>
+            <td class="p-3 text-center font-medium">${sub.assignment}</td>
+            <td class="p-3 text-center font-medium">${sub.note}</td>
+            <td class="p-3 text-center font-medium">${sub.exam}</td>
+            <td class="p-3 text-center font-bold text-slate-900">${sub.total}</td>
+            <td class="p-3 text-center"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800">${sub.grade}</span></td>
+            <td class="p-3 font-medium text-slate-500">${sub.remark}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+
+      // Analytics summaries
+      document.getElementById("view-total-score").textContent = payload.analytics.totalScore;
+      document.getElementById("view-average").textContent = `${payload.analytics.average}%`;
+      document.getElementById("view-ranking").textContent = payload.analytics.ranking;
+      document.getElementById("view-teacher-remark").textContent = `"${payload.analytics.teacherRemark}"`;
+    }
+
+    // Launch PDF generation call
+    async function generatePDFDownload() {
+      if (!activeResultPayload) return;
+      const btn = document.getElementById("pdf-btn");
+      const loader = document.getElementById("pdf-loader");
+      
+      btn.classList.add("hidden");
+      loader.classList.remove("hidden");
+      
+      try {
+        const response = await fetch(GAS_API_URL, {
+          method: "POST",
+          body: JSON.stringify({
+            action: "generateStudentPDF",
+            studentId: activeResultPayload.student.id,
+            parentPhone: activeResultPayload.student.phone
+          })
+        });
+        const result = await response.json();
+        if (result.success && result.downloadUrl) {
+          // Open PDF link in a new window cleanly
+          window.open(result.downloadUrl, "_blank");
+        } else {
+          alert("Error compiled payload. Verification failed.");
+        }
+      } catch (e) {
+        alert("Gateway PDF generation Timeout.");
+      } finally {
+        btn.classList.remove("hidden");
+        loader.classList.add("hidden");
+      }
+    }
+
+    // Toggle teacher grading module
+    function openTeacherGradeEntry() {
+      document.getElementById("auth-section").classList.add("hidden");
+      document.getElementById("grading-section").classList.remove("hidden");
+
+      const user = authState.staffData;
+      document.getElementById("operator-name").textContent = user.name;
+      document.getElementById("operator-domain").textContent = `${user.role} [Class: ${user.assignedClass} | Subject: ${user.assignedSubject}]`;
+
+      // Autocomplete standard defaults for teacher profile
+      if (user.role === "Teacher") {
+        document.getElementById("score-subject").value = user.assignedSubject;
+        document.getElementById("score-class").value = user.assignedClass;
+        document.getElementById("score-subject").disabled = true;
+        document.getElementById("score-class").disabled = true;
+      }
+    }
+
+    // Post individual grade scores
+    async function executeScorePost(event) {
+      event.preventDefault();
+      const loader = document.getElementById("commit-loader");
+      loader.classList.remove("hidden");
+
+      const scoreData = {
+        studentId: document.getElementById("score-student-id").value.trim(),
+        subject: document.getElementById("score-subject").value.trim(),
+        class: document.getElementById("score-class").value.trim(),
+        ca1: document.getElementById("score-ca1").value,
+        ca2: document.getElementById("score-ca2").value,
+        assignment: document.getElementById("score-ass").value,
+        note: document.getElementById("score-note").value,
+        exam: document.getElementById("score-exam").value
+      };
+
+      try {
+        const response = await fetch(GAS_API_URL, {
+          method: "POST",
+          body: JSON.stringify({
+            action: "saveOrUpdateScore",
+            auth: { username: authState.staffData.username, password: authState.staffData.password },
+            scoreData: scoreData
+          })
+        });
+        const result = await response.json();
+        alert(result.msg);
+        if (result.success) {
+          // Clear variables but keep target context
+          document.getElementById("score-student-id").value = "";
+          document.getElementById("score-ca1").value = "";
+          document.getElementById("score-ca2").value = "";
+          document.getElementById("score-ass").value = "";
+          document.getElementById("score-note").value = "";
+          document.getElementById("score-exam").value = "";
+        }
+      } catch (e) {
+        alert("Error posting scores to server.");
+      } finally {
+        loader.classList.add("hidden");
+      }
+    }
+
+    // Toggle Admin Database CRUD options
+    function openAdminSystemSettings() {
+      document.getElementById("grading-section").classList.add("hidden");
+      document.getElementById("admin-db-section").classList.remove("hidden");
+    }
+
+    function closeAdminSystemSettings() {
+      document.getElementById("admin-db-section").classList.add("hidden");
+      document.getElementById("grading-section").classList.remove("hidden");
+    }
+
+    // Admin: Create or update student profile meta
+    async function executeStudentPost(event) {
+      event.preventDefault();
+      const loader = document.getElementById("crud-loader");
+      loader.classList.remove("hidden");
+
+      const sData = {
+        id: document.getElementById("crud-id").value.trim(),
+        name: document.getElementById("crud-name").value.trim(),
+        class: document.getElementById("crud-class").value.trim(),
+        arm: document.getElementById("crud-arm").value.trim(),
+        section: document.getElementById("crud-section").value.trim(),
+        gender: document.getElementById("crud-gender").value,
+        parentPhone: document.getElementById("crud-phone").value.trim(),
+        photoId: document.getElementById("crud-photo").value.trim()
+      };
+
+      try {
+        const response = await fetch(GAS_API_URL, {
+          method: "POST",
+          body: JSON.stringify({
+            action: "manageStudent",
+            auth: { password: authState.adminPass, phone: authState.adminPhone },
+            studentData: sData
+          })
+        });
+        const result = await response.json();
+        alert(result.msg);
+        if (result.success) {
+          await cacheAdminMasterDirectory();
+        }
+      } catch (e) {
+        alert("Error mapping CRUD changes.");
+      } finally {
+        loader.classList.add("hidden");
+      }
+    }
+
+    // Admin: Remove student profile and scores
+    async function executeStudentDelete() {
+      const studentId = document.getElementById("crud-id").value.trim();
+      if (!studentId) return;
+      
+      if (!confirm("Confirm Delete Action: This removes the student profile and clears all associated grades!")) return;
+
+      const loader = document.getElementById("crud-loader");
+      loader.classList.remove("hidden");
+
+      try {
+        const response = await fetch(GAS_API_URL, {
+          method: "POST",
+          body: JSON.stringify({
+            action: "deleteStudent",
+            auth: { password: authState.adminPass, phone: authState.adminPhone },
+            studentId: studentId
+          })
+        });
+        const result = await response.json();
+        alert(result.msg);
+        if (result.success) {
+          document.getElementById("student-crud-form").reset();
+          await cacheAdminMasterDirectory();
+        }
+      } catch (e) {
+        alert("Error executing record deletion loop.");
+      } finally {
+        loader.classList.add("hidden");
+      }
+    }
+
+    // Session log out
+    function logout() {
+      authState = { mode: "student", staffData: null, studentData: null, adminPass: "", adminPhone: "" };
+      activeResultPayload = null;
+      adminStudentCache = [];
+      
+      document.getElementById("score-form").reset();
+      document.getElementById("student-crud-form").reset();
+      
+      document.getElementById("dashboard-section").classList.add("hidden");
+      document.getElementById("grading-section").classList.add("hidden");
+      document.getElementById("admin-db-section").classList.add("hidden");
+      document.getElementById("admin-selector-wrapper").classList.add("hidden");
+      document.getElementById("admin-db-link").classList.add("hidden");
+      
+      document.getElementById("auth-section").classList.remove("hidden");
+      alertMsg(null);
+    }
+  </script>
+
+  <!-- PWA OFFLINE SERVICE WORKER REGISTRATION -->
   <script>
     if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./service-worker.js')
-      .then(reg => console.log('Service Worker registered successfully!', reg.scope))
-      .catch(err => console.error('Service Worker registration failed:', err));
-  });
-}
-
-// Global variable to capture the install prompt
-let deferredPrompt;
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  // If you have an "Install App" button in your UI, make it visible here
-  const installBtn = document.getElementById('install-pwa-button');
-  if (installBtn) installBtn.style.display = 'block';
-});
-    /**
-     * STATE ORCHESTRATION CLIENT PIPELINE DRIVER ENGINE
-     */
-    const BACKEND_API_URL = "https://script.google.com/macros/s/AKfycbzBsnItUMiMEjYDWZlam8jzZq6Fxf6LIAQoUrFa5xI8Vcu5EtikFhF4CTQTrzSZ8Vx4/exec"; 
-
-    // Safety Interceptor check framework loop guarding against missing url values
-    if(BACKEND_API_URL.includes("PASTE_YOUR_NEW_WEB_APP_URL_HERE")) {
-       console.warn("System Alert Engine Trace: Application backend engine endpoint link array not connected.");
-    }
-
-    // Client Context Storage Maps
-    let activeStateSession = {
-      userRole: null,
-      authKeyA: null,
-      authKeyB: null,
-      studentIdToken: null,
-      masterDirectoryCache: [],
-      facultyActiveSubject: null,
-      facultyActiveStudentClass: null
-    };
-
-    /**
-     * Initializes structural frameworks on initial viewport compilation load sequence hooks
-     */
-    document.addEventListener("DOMContentLoaded", function() {
-      // Dynamic Calendar Year Hook execution
-      document.getElementById("DynamicYearLabel").textContent = new Date().getFullYear();
-      triggerGlobalAnnouncementDownloadLoop();
-    });
-
-    /**
-     * Queries notification metrics arrays across the background script loop thread
-     */
-    function triggerGlobalAnnouncementDownloadLoop() {
-      if(BACKEND_API_URL.includes("PASTE_YOUR_NEW_WEB_APP_URL_HERE")) return;
-      
-      fetch(BACKEND_API_URL, {
-        method: "POST",
-        mode: "cors",
-        body: JSON.stringify({ action: "getAnnouncements" })
-      })
-      .then(res => res.json())
-      .then(data => {
-        if(data.success && data.announcements && data.announcements.length > 0) {
-          document.getElementById("ticker-content-string").textContent = data.announcements.join(" | ");
-          document.getElementById("ticker-alert-ribbon").classList.remove("d-none");
-        }
-      }).catch(e => console.log("Ticker loop trace error skipped safely."));
-    }
-
-    /**
-     * Handles User Form submission actions and redirects down routing paths cleanly
-     */
-    function executeAuthRouting(event, routeMode) {
-      event.preventDefault();
-      clearErrorConsole();
-      setButtonLoadingState(event.submitForm, true);
-
-      let payload = { action: "" };
-
-      if (routeMode === 'student') {
-        payload.action = "studentLogin";
-        payload.studentId = document.getElementById("stdId").value;
-        payload.parentPhone = document.getElementById("stdPhone").value;
-        
-        activeStateSession.authKeyA = payload.studentId;
-        activeStateSession.authKeyB = payload.parentPhone;
-      } 
-      else if (routeMode === 'admin') {
-        payload.action = "adminLogin";
-        payload.adminPass = document.getElementById("admPass").value;
-        payload.adminGsm = document.getElementById("admGsm").value;
-        
-        activeStateSession.authKeyA = payload.adminPass;
-        activeStateSession.authKeyB = payload.adminGsm;
-      }
-      else if (routeMode === 'faculty') {
-        payload.action = "staffLogin";
-        payload.username = document.getElementById("facUser").value;
-        payload.password = document.getElementById("facPass").value;
-
-        activeStateSession.authKeyA = payload.username;
-        activeStateSession.authKeyB = payload.password;
-      }
-
-      executePayloadTransmissionRequest(payload, routeMode, event.target);
-    }
-
-    /**
-     * Dispatches network request packets through standard CORS pipelines
-     */
-    function executePayloadTransmissionRequest(payload, mode, formElement) {
-      fetch(BACKEND_API_URL, {
-        method: "POST",
-        mode: "cors",
-        body: JSON.stringify(payload)
-      })
-      .then(res => res.json())
-      .then(data => {
-        setButtonLoadingState(formElement, false);
-        if (!data.success) {
-          renderSystemErrorConsole(data.msg);
-          return;
-        }
-
-        activeStateSession.userRole = mode;
-        
-        if (mode === 'student') {
-          document.getElementById("auth-view-viewport").classList.add("d-none");
-          document.getElementById("admin-search-module-box").classList.add("d-none");
-          document.getElementById("transcript-dashboard-viewport").classList.remove("d-none");
-          renderStudentTranscriptDashboard(data);
-        } 
-        else if (mode === 'admin') {
-          activeStateSession.masterDirectoryCache = data.directory || [];
-          document.getElementById("auth-view-viewport").classList.add("d-none");
-          document.getElementById("transcript-dashboard-viewport").classList.remove("d-none");
-          document.getElementById("admin-search-module-box").classList.remove("d-none");
-          renderStudentTranscriptDashboard(data.analytics);
-        }
-        else if (mode === 'faculty') {
-          if(data.role === "Admin" || data.role === "Admin2") {
-            // Upgrade structural classification state securely to admin terminal view dashboard
-            activeStateSession.userRole = 'admin';
-            activeStateSession.authKeyA = document.getElementById("facPass").value;
-            activeStateSession.authKeyB = "08167628817"; // Fallback seed map parameter
-            
-            // Re-fetch configuration mappings as administrator context arrays
-            executeAdminRecordSwitch("");
-            return;
-          }
-          renderFacultyWorkspaceLayout(data);
-        }
-      })
-      .catch(err => {
-        setButtonLoadingState(formElement, false);
-        renderSystemErrorConsole("Connection Timeout or Fatal API Route Boundary Crash: " + err.toString());
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js')
+          .then(reg => console.log('PWA Service Worker Online: Ready for Offline Use.', reg.scope))
+          .catch(err => console.log('Service Worker Setup Failed: ', err));
       });
-    }
-
-    /**
-     * Binds internal JSON response fields to HTML elements natively
-     */
-    function renderStudentTranscriptDashboard(payload) {
-      if(!payload) {
-        renderSystemErrorConsole("Data Assembly Node Empty in Sheet Query Mapping Loop.");
-        return;
-      }
-      
-      // Update explicit source parameters cleanly avoiding image caching locks on state reloads
-      const profilePhotoNode = document.getElementById('img-student-photo');
-      if (payload.student.photoBase64) {
-        profilePhotoNode.src = payload.student.photoBase64;
-        profilePhotoNode.style.display = "block";
-      } else {
-        profilePhotoNode.src = "";
-        profilePhotoNode.style.display = "none";
-      }
-
-      const logoNode = document.getElementById('img-school-logo');
-      if (payload.school.logoBase64) {
-        logoNode.src = payload.school.logoBase64;
-        logoNode.style.display = "block";
-      } else {
-        logoNode.src = "";
-        logoNode.style.display = "none";
-      }
-
-      // Context labels assignment
-      document.getElementById("lbl-school-name").textContent = payload.school.name;
-      document.getElementById("lbl-school-address").textContent = payload.school.address;
-      document.getElementById("lbl-school-contact").textContent = `Web: ${payload.school.website} | Email: ${payload.school.email} | Contact Call: ${payload.school.phone}`;
-      
-      document.getElementById("val-name").textContent = payload.student.name;
-      document.getElementById("val-id").textContent = payload.student.id;
-      document.getElementById("val-gender").textContent = payload.student.gender;
-      document.getElementById("val-class").textContent = `${payload.student.classTier} (Arm ${payload.student.arm} - ${payload.student.section})`;
-      document.getElementById("val-term").textContent = `${payload.school.term} [${payload.school.year}]`;
-      document.getElementById("val-rank").textContent = payload.analytics.ranking;
-      
-      document.getElementById("card-total-score").textContent = payload.analytics.totalScore;
-      document.getElementById("card-average-percent").textContent = `${payload.analytics.average}%`;
-      
-      document.getElementById("lbl-head-title").textContent = `${payload.school.headTeacher.toUpperCase()} NARRATIVE ASSESSMENT SUMMARY:`;
-      document.getElementById("val-narrative-remark").textContent = `"${payload.analytics.teacherRemark}"`;
-
-      activeStateSession.studentIdToken = payload.student.id;
-
-      // Map Performance Transcript Data Matrix Array rows cleanly onto Target Table Elements
-      const tableBody = document.getElementById("transcript-table-body-target");
-      tableBody.innerHTML = "";
-
-      if(payload.analytics.subjects.length === 0) {
-        tableBody.innerHTML = `<tr><td colspan="9" class="text-center text-muted py-3">No evaluation score items logged under this student record metric block yet.</td></tr>`;
-        return;
-      }
-
-      payload.analytics.subjects.forEach(s => {
-        const row = document.createElement("tr");
-        
-        let badgeColor = "bg-danger";
-        if(s.grade === 'A') badgeColor = "bg-success";
-        else if(s.grade === 'B') badgeColor = "bg-primary";
-        else if(s.grade === 'C') badgeColor = "bg-info text-dark";
-        else if(s.grade === 'D') badgeColor = "bg-warning text-dark";
-        else if(s.grade === 'E') badgeColor = "bg-secondary";
-
-        row.innerHTML = `
-          <td style="text-align: left; font-weight: 600;">${s.name}</td>
-          <td>${s.ca1}</td>
-          <td>${s.ca2}</td>
-          <td>${s.assignment}</td>
-          <td>${s.note}</td>
-          <td>${s.exam}</td>
-          <td class="fw-bold bg-light">${s.total}</td>
-          <td><span class="badge ${badgeColor} px-2 py-1">${s.grade}</span></td>
-          <td class="small text-muted">${s.remark}</td>
-        `;
-        tableBody.appendChild(row);
-      });
-    }
-
-    /**
-     * Renders Predictive Text Search Box array lists instantaneously beneath administrative input bars
-     */
-    function filterAdminAutofillDirectory() {
-      const input = document.getElementById("adminSearchInput").value.toLowerCase();
-      const container = document.getElementById("adminAutofillDropdownContainer");
-      container.innerHTML = "";
-
-      if (!input) {
-        container.style.display = "none";
-        return;
-      }
-
-      const dynamicMatches = activeStateSession.masterDirectoryCache.filter(item => 
-        item.name.toLowerCase().includes(input) || 
-        item.id.toLowerCase().includes(input) || 
-        item.classTier.toLowerCase().includes(input)
-      );
-
-      if (dynamicMatches.length === 0) {
-        container.style.display = "none";
-        return;
-      }
-
-      dynamicMatches.slice(0, 10).forEach(match => {
-        const rowDiv = document.createElement("div");
-        rowDiv.className = "dropdown-search-item";
-        rowDiv.textContent = `${match.name} (${match.id}) - ${match.classTier}`;
-        rowDiv.onclick = function() {
-          document.getElementById("adminSearchInput").value = rowDiv.textContent;
-          container.style.display = "none";
-          executeAdminRecordSwitch(match.id);
-        };
-        container.appendChild(rowDiv);
-      });
-
-      container.style.display = "block";
-    }
-
-    // Intercept outside touch/clicks to collapse predictive dropdown fields cleanly across view frames
-    document.addEventListener("click", function(e) {
-      if (e.target.id !== "adminSearchInput") {
-        const container = document.getElementById("adminAutofillDropdownContainer");
-        if(container) container.style.display = "none";
-      }
-    });
-
-    /**
-     * Forces background switch requests mapping alternate target IDs
-     */
-    function executeAdminRecordSwitch(targetId) {
-      clearErrorConsole();
-      const loader = document.getElementById("pdf-loader");
-      if(loader) loader.classList.remove("d-none");
-
-      fetch(BACKEND_API_URL, {
-        method: "POST",
-        mode: "cors",
-        body: JSON.stringify({
-          action: "adminLogin",
-          adminPass: activeStateSession.authKeyA,
-          adminGsm: activeStateSession.authKeyB,
-          targetStudentId: targetId
-        })
-      })
-      .then(res => res.json())
-      .then(data => {
-        if(loader) loader.classList.add("d-none");
-        if(data.success) {
-          if(data.directory && data.directory.length > 0) activeStateSession.masterDirectoryCache = data.directory;
-          renderStudentTranscriptDashboard(data.analytics);
-        } else {
-          renderSystemErrorConsole(data.msg);
-        }
-      })
-      .catch(e => {
-        if(loader) loader.classList.add("d-none");
-        renderSystemErrorConsole("Background navigation pipeline failure: " + e.toString());
-      });
-    }
-
-    /**
-     * Unlocks Faculty Panel state spaces cleanly mapping contextual keys
-     */
-    function renderFacultyWorkspaceLayout(data) {
-      document.getElementById("auth-view-viewport").classList.add("d-none");
-      document.getElementById("faculty-workspace-viewport").classList.remove("d-none");
-      
-      document.getElementById("faculty-node-badge-lbl").textContent = `Instructor: ${data.name} [${data.role}]`;
-      document.getElementById("fac-lbl-assigned-subject").textContent = data.assignedSubject || "All Subjects (Admin Class Override Token)";
-      
-      activeStateSession.facultyActiveSubject = data.assignedSubject;
-      
-      // Clear workspace forms contexts fields mapping sequentially
-      document.getElementById("facTargetStudentId").value = "";
-      document.getElementById("faculty-score-fields-envelope").classList.add("d-none");
-      hideFacultyAlert();
-    }
-
-    /**
-     * Queries targeted record structures prior to displaying calculation data parameters to instructors
-     */
-    function fetchTargetStudentContextForFaculty() {
-      hideFacultyAlert();
-      const targetId = document.getElementById("facTargetStudentId").value.trim();
-      if(!targetId) {
-        showFacultyAlert("Please input a valid Student ID string first.", "alert-danger");
-        return;
-      }
-
-      fetch(BACKEND_API_URL, {
-        method: "POST",
-        mode: "cors",
-        body: JSON.stringify({
-          action: "getStudentProfile",
-          username: activeStateSession.authKeyA,
-          password: activeStateSession.authKeyB,
-          studentId: targetId
-        })
-      })
-      .then(res => res.json())
-      .then(data => {
-        if(!data.success) {
-          showFacultyAlert(data.msg, "alert-danger");
-          document.getElementById("faculty-score-fields-envelope").classList.add("d-none");
-          return;
-        }
-
-        // Expose dynamic input field frames inside context cards
-        document.getElementById("fac-lbl-student-name").textContent = data.studentName;
-        document.getElementById("fac-lbl-student-class").textContent = data.classTier;
-        document.getElementById("fac-lbl-assigned-subject").textContent = data.subject;
-        
-        activeStateSession.facultyActiveStudentClass = data.classTier;
-        activeStateSession.facultyActiveSubject = data.subject;
-
-        // Auto-populate existing row values to avoid rewriting previous data parameters entries
-        document.getElementById("score_ca1").value = data.scores.ca1;
-        document.getElementById("score_ca2").value = data.scores.ca2;
-        document.getElementById("score_assign").value = data.scores.assignment;
-        document.getElementById("score_note").value = data.scores.note;
-        document.getElementById("score_exam").value = data.scores.exam;
-
-        document.getElementById("faculty-score-fields-envelope").classList.remove("d-none");
-      })
-      .catch(e => showFacultyAlert("Database profile connection lost: " + e.toString(), "alert-danger"));
-    }
-
-    /**
-     * Commits single student parameter data records array fields down the active spreadsheet row mapping
-     */
-    function commitFacultyScoresToLedger(event) {
-      event.preventDefault();
-      hideFacultyAlert();
-
-      const payload = {
-        action: "submitScores",
-        username: activeStateSession.authKeyA,
-        password: activeStateSession.authKeyB,
-        studentId: document.getElementById("facTargetStudentId").value.trim(),
-        subject: activeStateSession.facultyActiveSubject,
-        classTier: activeStateSession.facultyActiveStudentClass,
-        scores: {
-          ca1: document.getElementById("score_ca1").value,
-          ca2: document.getElementById("score_ca2").value,
-          assignment: document.getElementById("score_assign").value,
-          note: document.getElementById("score_note").value,
-          exam: document.getElementById("score_exam").value
-        }
-      };
-
-      fetch(BACKEND_API_URL, {
-        method: "POST",
-        mode: "cors",
-        body: JSON.stringify(payload)
-      })
-      .then(res => res.json())
-      .then(data => {
-        if(data.success) {
-          showFacultyAlert(data.msg, "alert-success");
-          // Re-trigger visual query validation states updates automatically
-          fetchTargetStudentContextForFaculty();
-        } else {
-          showFacultyAlert(data.msg, "alert-danger");
-        }
-      })
-      .catch(e => showFacultyAlert("Transactional write failure to ledger mapping: " + e.toString(), "alert-danger"));
-    }
-
-    /**
-     * Triggers Headless System PDF conversion routines streams seamlessly across public storage drives caches links
-     */
-    function triggerPDFCompilationPipeline() {
-      const loader = document.getElementById("pdf-loader");
-      const btn = document.getElementById("download-pdf-btn");
-      
-      loader.classList.remove("d-none");
-      btn.disabled = true;
-
-      const payload = {
-        action: "generatePDF",
-        studentId: activeStateSession.studentIdToken,
-        authPass: activeStateSession.authKeyA,
-        authGsm: activeStateSession.authKeyB,
-        isStaff: (activeStateSession.userRole === 'admin')
-      };
-
-      fetch(BACKEND_API_URL, {
-        method: "POST",
-        mode: "cors",
-        body: JSON.stringify(payload)
-      })
-      .then(res => res.json())
-      .then(data => {
-        loader.classList.add("d-none");
-        btn.disabled = false;
-        
-        if(data.success && data.downloadUrl) {
-          // Open target binary download stream safely across standard mobile/desktop browsers handles nodes
-          window.open(data.downloadUrl, '_blank');
-        } else {
-          alert("PDF Compiler Engine Failure: " + (data.msg || "Unknown Exception."));
-        }
-      })
-      .catch(e => {
-        loader.classList.add("d-none");
-        btn.disabled = false;
-        alert("Fatal Error compiling asset: " + e.toString());
-      });
-    }
-
-    /**
-     * Interface State Reset Routing Engine
-     */
-    function resetAppRoutingState() {
-      activeStateSession.userRole = null;
-      activeStateSession.studentIdToken = null;
-      
-      document.getElementById("transcript-dashboard-viewport").classList.add("d-none");
-      document.getElementById("faculty-workspace-viewport").classList.add("d-none");
-      document.getElementById("auth-view-viewport").classList.remove("d-none");
-      
-      clearErrorConsole();
-    }
-function getPDFAsBase64(fileId) {
-  try {
-    const file = DriveApp.getFileById(fileId);
-    const blob = file.getAs('application/pdf');
-    const bytes = blob.getBytes();
-    const base64Data = Utilities.base64Encode(bytes);
-    return {
-      success: true,
-      base64: base64Data,
-      fileName: file.getName()
-    };
-  } catch (error) {
-    return { success: false, error: error.toString() };
-  }
-}
-    // UTILITY HELPER LOGIC LOOPS COMPONENT FRAMES
-    function renderSystemErrorConsole(message) {
-      const box = document.getElementById("error-alert-box");
-      box.textContent = message;
-      box.classList.remove("d-none");
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-    function clearErrorConsole() {
-      document.getElementById("error-alert-box").classList.add("d-none");
-    }
-    function showFacultyAlert(msg, variantClass) {
-      const box = document.getElementById("faculty-status-alert");
-      box.className = `alert ${variantClass}`;
-      box.textContent = msg;
-      box.classList.remove("d-none");
-    }
-    function hideFacultyAlert() {
-      document.getElementById("faculty-status-alert").classList.add("d-none");
-    }
-    function setButtonLoadingState(form, isLoading) {
-      if(!form) return;
-      const submitBtn = form.querySelector('button[type="submit"]');
-      if(!submitBtn) return;
-      
-      if(isLoading) {
-        submitBtn.disabled = true;
-        const label = submitBtn.querySelector('.btn-text-lbl');
-        if(label) label.dataset.oldTxt = label.textContent;
-        if(label) label.innerHTML = '<span class="loader-ring"></span> Syncing Database...';
-      } else {
-        submitBtn.disabled = false;
-        const label = submitBtn.querySelector('.btn-text-lbl');
-        if(label && label.dataset.oldTxt) label.textContent = label.dataset.oldTxt;
-      }
     }
   </script>
 </body>
