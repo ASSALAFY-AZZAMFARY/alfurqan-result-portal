@@ -1,22 +1,23 @@
 {
-  "name": "Alfurqan Science Academy Portal",
-  "short_name": "Alfurqan Portal",
-  "description": "Secure Student Terminal Report, Score Entry, Announcement & Transcript Management Portal",
-  "start_url": "index.html",
+  "short_name": "PortalApp",
+  "name": "Unified Administration and Portal Hub",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "./index.html",
+  "background_color": "#f8f9fa",
+  "theme_color": "#1a73e8",
   "display": "standalone",
-  "background_color": "#1e3a8a",
-  "theme_color": "#1e3a8a",
-  "orientation": "any",
- "icons": [
-  {
-    "src": "https://placeholder.co/192",
-    "sizes": "192x192",
-    "type": "image/png"
-  },
-  {
-    "src": "https://placeholder.co/512",
-    "sizes": "512x512",
-    "type": "image/png"
-  }
-]
+  "orientation": "portrait-primary"
 }
