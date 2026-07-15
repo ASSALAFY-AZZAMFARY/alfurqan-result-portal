@@ -4,7 +4,7 @@
 
 // CHANGE THIS TO YOUR EXACT LIVE GOOGLE APPS SCRIPT WEB APP ENDPOINT URL
 const CONFIG = {
-  BACKEND_API_URL: "https://script.google.com/macros/s/YOUR_DEPLOYED_APPS_SCRIPT_ID/exec"
+  BACKEND_API_URL: "https://script.google.com/macros/s/AKfycbxhreulykBdq7B8pzO_g0_ibNIJ6L8PVreRQpR8FwtpHH9PvODHcnOrdjXBwQfL7dcl/exec"
 };
 
 // --- CLIENT STATE STORE ---
