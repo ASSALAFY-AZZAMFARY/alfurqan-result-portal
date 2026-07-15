@@ -1,21 +1,22 @@
 {
-  "short_name": "Alfurqan Portal",
-  "name": "Alfurqan Science Academy Terminal Report Portal",
-  "icons": [
-    {
-      "src": "icons/icon-192.png",
-      "type": "image/png",
-      "sizes": "192x192"
-    },
-    {
-      "src": "icons/icon-512.png",
-      "type": "image/png",
-      "sizes": "512x512"
-    }
-  ],
-  "start_url": "./index.html",
+  "name": "Apex Academic Portal",
+  "short_name": "Apex PWA",
+  "description": "Enterprise-grade academic management, report card checker, and teacher entry system.",
+  "start_url": "/",
+  "display": "standalone",
   "background_color": "#1e3a8a",
   "theme_color": "#1e3a8a",
-  "display": "standalone",
-  "orientation": "portrait"
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
 }
