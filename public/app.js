@@ -1,5 +1,5 @@
 /**
- * Apex Academic PWA - Core Controller App
+ * ALFURQAN SCIENCE ACADEMY GUSAU PWA - Core Controller App
  */
 
 // CHANGE THIS TO YOUR EXACT LIVE GOOGLE APPS SCRIPT WEB APP ENDPOINT URL
